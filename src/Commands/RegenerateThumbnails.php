@@ -51,7 +51,7 @@ class RegenerateThumbnails extends Command
         $this->output->write("\n");
         
         foreach ($medias as $media) {
-            $mediaPath = $media->getDisk()->path($media->file_path);
+            $mediaPath = $media->getDisk()->url($media->file_path);
             
             if ($handler->isReadableImage($mediaPath)) {
                 try {
