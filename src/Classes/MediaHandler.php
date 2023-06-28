@@ -149,6 +149,7 @@ class MediaHandler
                 $origExtension = 'jpg';
             } else {
                 $img = Image::make($tempFilePath);
+                $img->backup();
             }
 
             $crop = isset($config['crop']) && $config['crop'];
@@ -189,6 +190,8 @@ class MediaHandler
                         'webp_size' => $disk->size(dirname($path) . '/' . $webpFilename),
                     ]);
                 }
+
+                $img->reset();
             } catch (NotSupportedException $e) {
                 continue;
             }
