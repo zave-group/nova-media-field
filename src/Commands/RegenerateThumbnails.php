@@ -14,7 +14,7 @@ class RegenerateThumbnails extends Command
      *
      * @var string
      */
-    protected $signature = 'media:regenerate-thumbnails';
+    protected $signature = 'media:regenerate-thumbnails {--skip= : Skip first N entities}';
 
     /**
      * The console command description.
@@ -43,16 +43,21 @@ class RegenerateThumbnails extends Command
         $Media = config('nova-media-field.media_model');
         $medias = $Media::all();
 
+        $skip = $this->argument('skip');
+        if ($skip) {
+            $medias = $medias->slice($skip);
+        }
+
         /** @var MediaHandler $handler */
         $handler = app()->make(MediaHandler::class);
 
         $updateCount = 0;
         $totalCount = $medias->count();
         $this->output->write("\n");
-        
+
         foreach ($medias as $media) {
             $mediaPath = $media->getDisk()->url($media->file_path);
-            
+
             if ($handler->isReadableImage($mediaPath)) {
                 try {
                     $generatedImages = $handler->generateImageSizes(file_get_contents($mediaPath), $media->file_path, $media->mime_type, $media->getDisk());
