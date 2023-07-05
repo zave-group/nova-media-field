@@ -43,7 +43,7 @@ class RegenerateThumbnails extends Command
         $Media = config('nova-media-field.media_model');
         $medias = $Media::all();
 
-        $skip = $this->argument('skip');
+        $skip = $this->option('skip');
         if ($skip) {
             $medias = $medias->slice($skip);
         }
